@@ -11,7 +11,7 @@ export async function onRequest(context) {
   if (vars[1] === "github") {
     valuesFile = new URL(`https://raw.githubusercontent.com/` + vars.slice(2).join('/'));
     jsonAppend();
-  } else if (vars[1].startsWith("https") === false) {
+  } else if (vars.length >= 1 && vars[1].startsWith("https") === false) {
     valuesFile = new URL(`https://` + vars.slice(1).join('/'));
     jsonAppend();
   } else {
