@@ -11,7 +11,7 @@ export async function onRequest(context) {
     valuesFile = vars.slice(1).join('/');
   };
   const upstream = await context.env.ASSETS.fetch(url);
-  let schema = JSON.parse(await upstream.json());
+  let schema = JSON.parse(JSON.stringify(await upstream.json()));
   //let schema = upstream.json();
   schema.properties.spec.properties.values.$ref = valuesFile;
   return new Response(JSON.stringify(schema), upstream)
