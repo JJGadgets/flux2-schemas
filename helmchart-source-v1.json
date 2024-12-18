@@ -1,5 +1,5 @@
 {
-  "description": "HelmRepository is the Schema for the helmrepositories API.",
+  "description": "HelmChart is the Schema for the helmcharts API.",
   "properties": {
     "apiVersion": {
       "description": "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
@@ -13,113 +13,135 @@
       "type": "object"
     },
     "spec": {
-      "description": "HelmRepositorySpec specifies the required configuration to produce an\nArtifact for a Helm repository index YAML.",
+      "description": "HelmChartSpec specifies the desired state of a Helm chart.",
       "properties": {
-        "accessFrom": {
-          "description": "AccessFrom specifies an Access Control List for allowing cross-namespace\nreferences to this object.\nNOTE: Not implemented, provisional as of https://github.com/fluxcd/flux2/pull/2092",
-          "properties": {
-            "namespaceSelectors": {
-              "description": "NamespaceSelectors is the list of namespace selectors to which this ACL applies.\nItems in this list are evaluated using a logical OR operation.",
-              "items": {
-                "description": "NamespaceSelector selects the namespaces to which this ACL applies.\nAn empty map of MatchLabels matches all namespaces in a cluster.",
-                "properties": {
-                  "matchLabels": {
-                    "additionalProperties": {
-                      "type": "string"
-                    },
-                    "description": "MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels\nmap is equivalent to an element of matchExpressions, whose key field is \"key\", the\noperator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
-                    "type": "object"
-                  }
-                },
-                "type": "object",
-                "additionalProperties": false
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "namespaceSelectors"
-          ],
-          "type": "object",
-          "additionalProperties": false
+        "chart": {
+          "description": "Chart is the name or path the Helm chart is available at in the\nSourceRef.",
+          "type": "string"
         },
-        "certSecretRef": {
-          "description": "CertSecretRef can be given the name of a Secret containing\neither or both of\n\n- a PEM-encoded client certificate (`tls.crt`) and private\nkey (`tls.key`);\n- a PEM-encoded CA certificate (`ca.crt`)\n\nand whichever are supplied, will be used for connecting to the\nregistry. The client cert and key are useful if you are\nauthenticating with a certificate; the CA cert is useful if\nyou are using a self-signed server certificate. The Secret must\nbe of type `Opaque` or `kubernetes.io/tls`.\n\nIt takes precedence over the values specified in the Secret referred\nto by `.spec.secretRef`.",
-          "properties": {
-            "name": {
-              "description": "Name of the referent.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "name"
-          ],
-          "type": "object",
-          "additionalProperties": false
-        },
-        "insecure": {
-          "description": "Insecure allows connecting to a non-TLS HTTP container registry.\nThis field is only taken into account if the .spec.type field is set to 'oci'.",
+        "ignoreMissingValuesFiles": {
+          "description": "IgnoreMissingValuesFiles controls whether to silently ignore missing values\nfiles rather than failing.",
           "type": "boolean"
         },
         "interval": {
-          "description": "Interval at which the HelmRepository URL is checked for updates.\nThis interval is approximate and may be subject to jitter to ensure\nefficient use of resources.",
+          "description": "Interval at which the HelmChart SourceRef is checked for updates.\nThis interval is approximate and may be subject to jitter to ensure\nefficient use of resources.",
           "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m|h))+$",
           "type": "string"
         },
-        "passCredentials": {
-          "description": "PassCredentials allows the credentials from the SecretRef to be passed\non to a host that does not match the host as defined in URL.\nThis may be required if the host of the advertised chart URLs in the\nindex differ from the defined URL.\nEnabling this should be done with caution, as it can potentially result\nin credentials getting stolen in a MITM-attack.",
-          "type": "boolean"
-        },
-        "provider": {
-          "default": "generic",
-          "description": "Provider used for authentication, can be 'aws', 'azure', 'gcp' or 'generic'.\nThis field is optional, and only taken into account if the .spec.type field is set to 'oci'.\nWhen not specified, defaults to 'generic'.",
+        "reconcileStrategy": {
+          "default": "ChartVersion",
+          "description": "ReconcileStrategy determines what enables the creation of a new artifact.\nValid values are ('ChartVersion', 'Revision').\nSee the documentation of the values for an explanation on their behavior.\nDefaults to ChartVersion when omitted.",
           "enum": [
-            "generic",
-            "aws",
-            "azure",
-            "gcp"
+            "ChartVersion",
+            "Revision"
           ],
           "type": "string"
         },
-        "secretRef": {
-          "description": "SecretRef specifies the Secret containing authentication credentials\nfor the HelmRepository.\nFor HTTP/S basic auth the secret must contain 'username' and 'password'\nfields.\nSupport for TLS auth using the 'certFile' and 'keyFile', and/or 'caFile'\nkeys is deprecated. Please use `.spec.certSecretRef` instead.",
+        "sourceRef": {
+          "description": "SourceRef is the reference to the Source the chart is available at.",
           "properties": {
+            "apiVersion": {
+              "description": "APIVersion of the referent.",
+              "type": "string"
+            },
+            "kind": {
+              "description": "Kind of the referent, valid values are ('HelmRepository', 'GitRepository',\n'Bucket').",
+              "enum": [
+                "HelmRepository",
+                "GitRepository",
+                "Bucket"
+              ],
+              "type": "string"
+            },
             "name": {
               "description": "Name of the referent.",
               "type": "string"
             }
           },
           "required": [
+            "kind",
             "name"
           ],
           "type": "object",
           "additionalProperties": false
         },
         "suspend": {
-          "description": "Suspend tells the controller to suspend the reconciliation of this\nHelmRepository.",
+          "description": "Suspend tells the controller to suspend the reconciliation of this\nsource.",
           "type": "boolean"
         },
-        "timeout": {
-          "description": "Timeout is used for the index fetch operation for an HTTPS helm repository,\nand for remote OCI Repository operations like pulling for an OCI helm\nchart by the associated HelmChart.\nIts default value is 60s.",
-          "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m))+$",
-          "type": "string"
+        "valuesFiles": {
+          "description": "ValuesFiles is an alternative list of values files to use as the chart\nvalues (values.yaml is not included by default), expected to be a\nrelative path in the SourceRef.\nValues files are merged in the order of this list with the last file\noverriding the first. Ignored when omitted.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
-        "type": {
-          "description": "Type of the HelmRepository.\nWhen this field is set to  \"oci\", the URL field value must be prefixed with \"oci://\".",
-          "enum": [
-            "default",
-            "oci"
+        "verify": {
+          "description": "Verify contains the secret name containing the trusted public keys\nused to verify the signature and specifies which provider to use to check\nwhether OCI image is authentic.\nThis field is only supported when using HelmRepository source with spec.type 'oci'.\nChart dependencies, which are not bundled in the umbrella chart artifact, are not verified.",
+          "properties": {
+            "matchOIDCIdentity": {
+              "description": "MatchOIDCIdentity specifies the identity matching criteria to use\nwhile verifying an OCI artifact which was signed using Cosign keyless\nsigning. The artifact's identity is deemed to be verified if any of the\nspecified matchers match against the identity.",
+              "items": {
+                "description": "OIDCIdentityMatch specifies options for verifying the certificate identity,\ni.e. the issuer and the subject of the certificate.",
+                "properties": {
+                  "issuer": {
+                    "description": "Issuer specifies the regex pattern to match against to verify\nthe OIDC issuer in the Fulcio certificate. The pattern must be a\nvalid Go regular expression.",
+                    "type": "string"
+                  },
+                  "subject": {
+                    "description": "Subject specifies the regex pattern to match against to verify\nthe identity subject in the Fulcio certificate. The pattern must\nbe a valid Go regular expression.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "issuer",
+                  "subject"
+                ],
+                "type": "object",
+                "additionalProperties": false
+              },
+              "type": "array"
+            },
+            "provider": {
+              "default": "cosign",
+              "description": "Provider specifies the technology used to sign the OCI Artifact.",
+              "enum": [
+                "cosign",
+                "notation"
+              ],
+              "type": "string"
+            },
+            "secretRef": {
+              "description": "SecretRef specifies the Kubernetes Secret containing the\ntrusted public keys.",
+              "properties": {
+                "name": {
+                  "description": "Name of the referent.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "provider"
           ],
-          "type": "string"
+          "type": "object",
+          "additionalProperties": false
         },
-        "url": {
-          "description": "URL of the Helm repository, a valid URL contains at least a protocol and\nhost.",
-          "pattern": "^(http|https|oci)://.*$",
+        "version": {
+          "default": "*",
+          "description": "Version is the chart version semver expression, ignored for charts from\nGitRepository and Bucket sources. Defaults to latest when omitted.",
           "type": "string"
         }
       },
       "required": [
-        "url"
+        "chart",
+        "interval",
+        "sourceRef"
       ],
       "type": "object",
       "additionalProperties": false
@@ -128,10 +150,10 @@
       "default": {
         "observedGeneration": -1
       },
-      "description": "HelmRepositoryStatus records the observed state of the HelmRepository.",
+      "description": "HelmChartStatus records the observed state of the HelmChart.",
       "properties": {
         "artifact": {
-          "description": "Artifact represents the last successful HelmRepository reconciliation.",
+          "description": "Artifact represents the output of the last successful reconciliation.",
           "properties": {
             "digest": {
               "description": "Digest is the digest of the file in the form of '<algorithm>:<checksum>'.",
@@ -178,7 +200,7 @@
           "additionalProperties": false
         },
         "conditions": {
-          "description": "Conditions holds the conditions for the HelmRepository.",
+          "description": "Conditions holds the conditions for the HelmChart.",
           "items": {
             "description": "Condition contains details for one aspect of the current state of this API Resource.",
             "properties": {
@@ -237,13 +259,28 @@
           "description": "LastHandledReconcileAt holds the value of the most recent\nreconcile request value, so a change of the annotation value\ncan be detected.",
           "type": "string"
         },
+        "observedChartName": {
+          "description": "ObservedChartName is the last observed chart name as specified by the\nresolved chart reference.",
+          "type": "string"
+        },
         "observedGeneration": {
-          "description": "ObservedGeneration is the last observed generation of the HelmRepository\nobject.",
+          "description": "ObservedGeneration is the last observed generation of the HelmChart\nobject.",
           "format": "int64",
           "type": "integer"
         },
+        "observedSourceArtifactRevision": {
+          "description": "ObservedSourceArtifactRevision is the last observed Artifact.Revision\nof the HelmChartSpec.SourceRef.",
+          "type": "string"
+        },
+        "observedValuesFiles": {
+          "description": "ObservedValuesFiles are the observed value files of the last successful\nreconciliation.\nIt matches the chart in the last successfully reconciled artifact.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "url": {
-          "description": "URL is the dynamic fetch link for the latest Artifact.\nIt is provided on a \"best effort\" basis, and using the precise\nHelmRepositoryStatus.Artifact data is recommended.",
+          "description": "URL is the dynamic fetch link for the latest Artifact.\nIt is provided on a \"best effort\" basis, and using the precise\nBucketStatus.Artifact data is recommended.",
           "type": "string"
         }
       },
