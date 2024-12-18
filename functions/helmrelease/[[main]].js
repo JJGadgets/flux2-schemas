@@ -4,7 +4,7 @@ export async function onRequest(context) {
   var valuesFile;
   if (vars[1] = "github") {
     valuesFile = `https://raw.githubusercontent.com/` + vars.slice(2).join('/');
-    if (valuesFile.endsWith(".json") = false) {valuesFile += `/values.schema.json`};
+    if (valuesFile.endsWith(".json") === false) {valuesFile += `/values.schema.json`};
   } else {
     valuesFile = vars.slice(1).join('/');
   };
