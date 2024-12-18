@@ -8,7 +8,8 @@ export async function onRequest(context) {
   } else {
     valuesFile = vars.slice(1).join('/');
   };
-  var schema = JSON.parse(await env.ASSETS.fetch(`helmrelease-helm-` + apiVersion + `.json`));
+  const upstream = await context.env.ASSETS.fetch(`helmrelease-helm-` + apiVersion + `.json`);
+  var schema = JSON.parse(upstream.body);
   schema.properties.spec.properties.values.$ref = valuesFile;
-  return new Response(JSON.stringify(schema))
+  return new Response(JSON.stringify(schema), upstream)
 }
