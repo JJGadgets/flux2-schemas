@@ -1,28 +1,25 @@
 {
   "oneOf": [
     {
-      "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta1.Alert"
-    },
-    {
       "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta2.Alert"
     },
     {
       "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta3.Alert"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.Bucket"
+      "$ref": "_definitions.json#/definitions/source.extensions.fluxcd.io.v1beta1.ArtifactGenerator"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta1.Bucket"
+      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.Bucket"
     },
     {
       "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta2.Bucket"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.GitRepository"
+      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.ExternalArtifact"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta1.GitRepository"
+      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.GitRepository"
     },
     {
       "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta2.GitRepository"
@@ -31,16 +28,10 @@
       "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.HelmChart"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta1.HelmChart"
-    },
-    {
       "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta2.HelmChart"
     },
     {
       "$ref": "_definitions.json#/definitions/helm.toolkit.fluxcd.io.v2.HelmRelease"
-    },
-    {
-      "$ref": "_definitions.json#/definitions/helm.toolkit.fluxcd.io.v2beta1.HelmRelease"
     },
     {
       "$ref": "_definitions.json#/definitions/helm.toolkit.fluxcd.io.v2beta2.HelmRelease"
@@ -49,25 +40,22 @@
       "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.HelmRepository"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta1.HelmRepository"
-    },
-    {
       "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta2.HelmRepository"
     },
     {
-      "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1beta1.ImagePolicy"
+      "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1.ImagePolicy"
     },
     {
       "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1beta2.ImagePolicy"
     },
     {
-      "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1beta1.ImageRepository"
+      "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1.ImageRepository"
     },
     {
       "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1beta2.ImageRepository"
     },
     {
-      "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1beta1.ImageUpdateAutomation"
+      "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1.ImageUpdateAutomation"
     },
     {
       "$ref": "_definitions.json#/definitions/image.toolkit.fluxcd.io.v1beta2.ImageUpdateAutomation"
@@ -76,16 +64,13 @@
       "$ref": "_definitions.json#/definitions/kustomize.toolkit.fluxcd.io.v1.Kustomization"
     },
     {
-      "$ref": "_definitions.json#/definitions/kustomize.toolkit.fluxcd.io.v1beta1.Kustomization"
-    },
-    {
       "$ref": "_definitions.json#/definitions/kustomize.toolkit.fluxcd.io.v1beta2.Kustomization"
     },
     {
-      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta2.OCIRepository"
+      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1.OCIRepository"
     },
     {
-      "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta1.Provider"
+      "$ref": "_definitions.json#/definitions/source.toolkit.fluxcd.io.v1beta2.OCIRepository"
     },
     {
       "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta2.Provider"
@@ -95,9 +80,6 @@
     },
     {
       "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1.Receiver"
-    },
-    {
-      "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta1.Receiver"
     },
     {
       "$ref": "_definitions.json#/definitions/notification.toolkit.fluxcd.io.v1beta2.Receiver"
